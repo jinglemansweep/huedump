@@ -53,3 +53,9 @@ To view lights in a formatted table, use the ```lights``` action:
 ```
 $ huedump lights
 ```
+
+To render output using a [Jinja2](http://jinja.pocoo.org/) template, use the ```render``` action:
+
+```
+$ huedump render --template ./templates/openhab.items.j2 > output.txt
+```
