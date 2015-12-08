@@ -35,8 +35,17 @@ class Controller(CementBaseController):
         self.app.log.info("Lights")
         self.login()
         lights = self.sort_dict(self.api().get("lights"))
-        rows = [[i, l.get("name"), l.get("modelid")] for i, l in lights.iteritems()]
-        t = self.table(["Idx", "Name", "Model"], rows)
+        rows = [[i, 
+                 l.get("name"), 
+                 l.get("manufacturername"),
+                 l.get("modelid"),
+                 "ON" if l.get("state").get("on") else "",
+                 l.get("state").get("bri", ""),
+                 l.get("state").get("colormode", ""),
+                 l.get("state").get("hue", ""),
+                 l.get("state").get("sat", "")
+                ] for i, l in lights.iteritems()]
+        t = self.table(["#", "Name", "Manu", "Model", "On", "Bri", "CM", "Hue", "Sat"], rows)
         self.app.log.info(t)
             
     @expose(hide=True)
