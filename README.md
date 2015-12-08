@@ -114,4 +114,5 @@ Name:       {{ l.name }}
 Ref:        {{ l._ref }}
 Groups:     {{ l._groups }}
 Brightness: {{ l._brightness }}
+{% endfor %}
 ```
