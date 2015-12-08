@@ -10,8 +10,6 @@ from prettytable import PrettyTable as Table
 from pygments import highlight, lexers, formatters
 
 
-# b5f093b1388368f39ac904310ef6817
-
 class Controller(CementBaseController):
 
     class Meta:
@@ -31,7 +29,6 @@ class Controller(CementBaseController):
         self.app.log.info("Dump")
         self.login()
         self.app.log.info(self.format_json(self.bridge.get_api()))
-        print(self.app.config.get("bridge", "host"))
 
     @expose(help="Lights")
     def lights(self):
