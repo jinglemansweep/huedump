@@ -1,7 +1,7 @@
 {% for idx, l in lights.items() %}
-Switch   hue{{ idx }}   "{{ l.name }}"   (groups)   {hue="{{ idx }}"}
-Dimmer   hue{{ idx }}_dim   "{{ l.name }}"   (groups,dimmer)   {hue="{{ idx }};brightness;30"}
+Switch   {{ l._alias }}          "{{ l.name }}"   (groups)          {hue="{{ idx }}"}
+Dimmer   {{ l._alias }}_dim      "{{ l.name }}"   (groups,dimmer)   {hue="{{ idx }};brightness;30"}
 {% if l.state.colormode -%}
-Colour   hue{{ idx }}_colour   "{{ l.name }}"   (groups,colour)   {hue="{{ idx }}"}
+Colour   {{ l._alias }}_colour   "{{ l.name }}"   (groups,colour)   {hue="{{ idx }}"}
 {% endif %}
 {%- endfor %}

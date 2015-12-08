@@ -81,3 +81,23 @@ To render output using a [Jinja2](http://jinja.pocoo.org/) template, use the ```
 ```
 $ huedump render --template ./templates/openhab.items.j2 > output.txt
 ```
+
+## Configuration
+
+You can add aliases to all of your lights based on their hubs index number. The alias value is available
+within templates with the `_alias` key which is added to each `lights.*` API value automatically.
+
+```
+[bridge]
+host=192.168.1.21
+user=a9daa3b1388368f39ac904310ef6817
+
+[aliases]
+light1=LoungeLampBack
+light2=LoungeLampFront
+light3=LoungeBloom
+light4=KitchenBloom
+light5=PortableBloom
+light6=LoungeLightBack
+light7=LoungeLightFront
+```

@@ -26,20 +26,18 @@ class Controller(CementBaseController):
             ]
 
 
-    @expose(help="Dump")
+    @expose(help="Dump the configuration and state of the bridge")
     def dump(self):
-        self.app.log.debug("Dump")
         self.login()
         self.app.log.info(self.format_json(self.api))
 
-    @expose(help="Lights")
+    @expose(help="Display a summary of lights registered on the bridge")
     def lights(self):
-        self.app.log.debug("Lights")
         self.login()
-
         lights = self.sort_dict(self.api.get("lights"))
         rows = [[i, 
                  l.get("name"), 
+                 l.get("_alias"),
                  l.get("manufacturername"),
                  l.get("modelid"),
                  "ON" if l.get("state").get("on") else "",
@@ -48,12 +46,11 @@ class Controller(CementBaseController):
                  l.get("state").get("hue", ""),
                  l.get("state").get("sat", "")
                 ] for i, l in lights.iteritems()]
-        t = self.table(["#", "Name", "Manu", "Model", "On", "Bri", "CM", "Hue", "Sat"], rows)
+        t = self.table(["#", "Name", "Alias", "Manu", "Model", "On", "Bri", "CM", "Hue", "Sat"], rows)
         self.app.log.info(t)
             
     @expose(help="Render state using a template")
     def render(self):
-        self.app.log.debug("Render")
         self.login()
         tpl = self.template(self.app.pargs.template, self.api)
         print(tpl)
@@ -70,7 +67,16 @@ class Controller(CementBaseController):
             if e.errno == -2:
                 self.app.log.error("Invalid bridge host")
             sys.exit(1)
+        self.add_metadata()
 
+    @expose(hide=True)
+    def add_metadata(self):
+        aliases = dict(self.app.config.items("aliases"))
+        for idx, light in sorted(self.api.get("lights").items()):
+            ref = "light{}".format(idx)
+            val = aliases.get(ref) if ref in aliases else light.get("name")
+            self.api.get("lights").get(idx)["_alias"] = val
+            
     @expose(hide=True)
     def sort_dict(self, d):
         return OrderedDict(sorted(d.items()))
