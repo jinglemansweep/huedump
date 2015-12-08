@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import sys
 from collections import OrderedDict
 from cement.core.foundation import CementApp
@@ -71,11 +72,14 @@ class Controller(CementBaseController):
 
     @expose(hide=True)
     def add_metadata(self):
-        aliases = dict(self.app.config.items("aliases"))
-        for idx, light in sorted(self.api.get("lights").items()):
-            ref = "light{}".format(idx)
-            val = aliases.get(ref) if ref in aliases else light.get("name")
-            self.api.get("lights").get(idx)["_alias"] = val
+        meta = dict(self.app.config.items("metadata"))
+        regex = "((?:[a-z][a-z]+))(\\d+)"
+        for k, v in meta.iteritems():
+            rg = re.compile(regex, re.IGNORECASE|re.DOTALL)
+            m = rg.search(k)
+            if not m: continue
+            prefix, idx = m.group(1), m.group(2)
+            self.api.get("lights").get(idx)["_" + prefix] = v
             
     @expose(hide=True)
     def sort_dict(self, d):

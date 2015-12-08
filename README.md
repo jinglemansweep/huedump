@@ -84,20 +84,34 @@ $ huedump render --template ./templates/openhab.items.j2 > output.txt
 
 ## Configuration
 
-You can add aliases to all of your lights based on their hubs index number. The alias value is available
-within templates with the `_alias` key which is added to each `lights.*` API value automatically.
+You can add metadata to all of your lights based on their hubs index number. Metadata values are available
+within templates with the respective `_prefix` key which is added to each `lights.*` API value automatically.
+
+The `metadata` example below will set `_ref` and `_groups` values on lights 1, 2 and 3. It will additionally
+set a `_brightness` value for light 3.
 
 ```
 [bridge]
 host=192.168.1.21
 user=a9daa3b1388368f39ac904310ef6817
 
-[aliases]
-light1=LoungeLampBack
-light2=LoungeLampFront
-light3=LoungeBloom
-light4=KitchenBloom
-light5=PortableBloom
-light6=LoungeLightBack
-light7=LoungeLightFront
+[metadata]
+ref1=LoungeLampBack
+groups1=all,lights,lounge
+ref2=LoungeLampFront
+groups2=all,lights,lounge
+ref3=KitchenBloom
+groups3=all,lights,kitchen
+brightness3=50
+```
+
+### Template Usage
+
+```
+{% for idx, l in lights %}
+Index:      {{ idx }}
+Name:       {{ l.name }}
+Ref:        {{ l._ref }}
+Groups:     {{ l._groups }}
+Brightness: {{ l._brightness }}
 ```

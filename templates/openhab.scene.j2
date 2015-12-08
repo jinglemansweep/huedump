@@ -1,11 +1,11 @@
 {% for idx, l in lights|dictsort -%}
 {% if l.state.on -%}
 {% if l.state.colormode -%}
-sendCommand({{ l._alias }}, new HSBType(new DecimalType({{ (l.state.hue/256)|round(1) }}), new PercentType({{ ((l.state.sat/256)*100)|round }}), new PercentType({{ ((l.state.sat/256)*100)|round }})).toString())
+sendCommand({{ l._ref }}, new HSBType(new DecimalType({{ (l.state.hue/256)|round(1) }}), new PercentType({{ ((l.state.sat/256)*100)|round }}), new PercentType({{ ((l.state.sat/256)*100)|round }})).toString())
 {%- else -%}
-sendCommand({{ l._alias }}, {{ ((l.state.bri/256)*100)|round(1) }})
+sendCommand({{ l._ref }}, {{ ((l.state.bri/256)*100)|round(1) }})
 {%- endif %}
 {%  else %}
-sendCommand({{ l._alias }}, OFF)
+sendCommand({{ l._ref }}, OFF)
 {%- endif %}
 {%- endfor %}
